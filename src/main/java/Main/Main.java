@@ -1,15 +1,25 @@
 package Main;
 
 import Conn.ConnectionFactory;
+import DAO.NaveDAO;
+import DAO.PassageiroDAO;
+import DAO.ViagemDAO;
+import entities.Nave;
+import entities.Passageiro;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
     private static final Scanner SC = new Scanner(System.in);
-    public static void main(String[] args) {
+    private static final NaveDAO NAVE_DAO = new NaveDAO();
+    private static final PassageiroDAO PASSAGEIRO_DAO = new PassageiroDAO();
+    private static final ViagemDAO VIAGEM_DAO = new ViagemDAO();
+    public static void main(String[] args) throws SQLException {
         Connection conn = null;
         try{
             System.out.println("Fazendo a conexão com o Supabase");
@@ -34,12 +44,13 @@ public class Main {
         }
         mostrarMenu();
     }
-    public static void mostrarMenu(){
+    public static void mostrarMenu() throws SQLException {
         while (true){
             System.out.println("1. Adicionar Nave à Frota\n2. Ver Frota Disponível\n3. Cadastrar Passageiro" +
                     "\n4. Ver Passageiros Cadastrados\n5. Realizar Reserva\n6. Ver Histórico de Viagens\n7. Sair"
             );
             int opcao = SC.nextInt();
+            SC.nextLine();
             switch (opcao){
                 case 1:
                     adicionarNave();
@@ -65,14 +76,35 @@ public class Main {
 
         }
     }
-    public static void adicionarNave(){
+    public static void adicionarNave() throws SQLException {
+        System.out.println("-----Adicionar-Naves-----");
+        System.out.println("Nome: ");
+        String nomeNave = SC.nextLine();
+        System.out.println("Capacidade: ");
+        int capacidadeNave = SC.nextInt();
+        System.out.println("Preço Base: ");
+        double precoBaseNave = SC.nextDouble();
+        Nave nave = new Nave(nomeNave, capacidadeNave, precoBaseNave, true);
+        NAVE_DAO.adicionarNave(nave);
 
     }
-    public static void verFrota(){
-
+    public static void verFrota() throws SQLException {
+        System.out.println("-----Ver-Todas-Naves-Disponíveis-----");
+        ArrayList<Nave> listaNaves = NAVE_DAO.verNavesDisponiveis();
+        for(Nave nave: listaNaves){
+            System.out.println(nave);
+        }
     }
-    public static void cadastrarPassageiro(){
-
+    public static void cadastrarPassageiro() throws SQLException {
+        System.out.println("-----Cadastrar-Passageiros-----");
+        System.out.println("Nome: ");
+        String nome = SC.nextLine();
+        System.out.println("RG Espacial: ");
+        String rgEspacial = SC.next();
+        System.out.println("Email: ");
+        String email = SC.next();
+        Passageiro passageiro = new Passageiro(nome, rgEspacial, email);
+        PASSAGEIRO_DAO.adicionarPassageiro(passageiro);
     }
     public static void verPassageiro(){
 
