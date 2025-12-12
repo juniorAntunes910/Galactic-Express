@@ -21,14 +21,13 @@ public class NaveDAO {
     }
 
     public void adicionarNave(Nave nave) throws SQLException {
-        String sql = "INSERT INTO nave (nome, capacidade, preco_base, esta_disponivel) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO nave (nome, capacidade, preco_base, esta_disponivel ) VALUES (?, ?, ?,?)";
         PreparedStatement stmt = conn.prepareStatement(sql);
 
         stmt.setString(1, nave.getNome());
         stmt.setInt(2, nave.getCapacidade());
         stmt.setDouble(3, nave.getPrecoBase());
-        stmt.setBoolean(4, nave.isDisponivel());
-
+        stmt.setBoolean(4, true);
         stmt.executeUpdate();
         System.out.println("A nave " + nave.getNome() + " Foi adicionada ao banco de dados");
 
@@ -50,4 +49,11 @@ public class NaveDAO {
         }
         return listaNaves;
     }
+
+    public void mudarStatusDisponivelFalso(int id) throws SQLException {
+        String sql = "UPDATE nave SET esta_disponivel = Indisponivel WHERE id = " + id;
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.execute();
+    }
+
 }

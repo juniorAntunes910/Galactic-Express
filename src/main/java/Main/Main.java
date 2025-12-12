@@ -6,6 +6,7 @@ import DAO.PassageiroDAO;
 import DAO.ViagemDAO;
 import entities.Nave;
 import entities.Passageiro;
+import entities.Viagem;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -106,10 +107,37 @@ public class Main {
         Passageiro passageiro = new Passageiro(nome, rgEspacial, email);
         PASSAGEIRO_DAO.adicionarPassageiro(passageiro);
     }
-    public static void verPassageiro(){
+    public static void verPassageiro() throws SQLException{
+        ArrayList<Passageiro> listaPassageiros = PASSAGEIRO_DAO.verPassageiro();
+        for (Passageiro passageiro : listaPassageiros) {
+            System.out.println(passageiro);
+        }
+
 
     }
-    public static void realizarReserva(){
+    public static void realizarReserva() throws  SQLException{
+        System.out.println("-----Realizar-Reserva-----");
+        System.out.println("Lista de Naves: ");
+        ArrayList<Nave> listaNaves = NAVE_DAO.verNavesDisponiveis();
+        for(Nave nave : listaNaves){
+            System.out.println(nave);
+        }
+        System.out.println("Lista de Passageiros: ");
+        ArrayList<Passageiro> listaPassageiros = PASSAGEIRO_DAO.verPassageiro();
+        for(Passageiro passageiro : listaPassageiros){
+            System.out.println(passageiro);
+        }
+        System.out.println("Insira o ID da Nave: ");
+        int idNave = SC.nextInt();
+        System.out.println("Insira o ID do Passageiro: ");
+        int idPassageiro = SC.nextInt();
+        SC.nextLine();
+        System.out.println("Insira o destino da viagem: ");
+        String destino = SC.nextLine();
+        System.out.println("Insira o preço final da viagem: ");
+        double precoFinal = SC.nextDouble();
+        Viagem viagem = new Viagem(idPassageiro, idNave, destino, precoFinal);
+        VIAGEM_DAO.realizarReserva(viagem);
 
     }
     public static void verHistorico(){
